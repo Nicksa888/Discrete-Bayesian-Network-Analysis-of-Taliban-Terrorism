@@ -37,7 +37,7 @@ suppressPackageStartupMessages(
 ###############################
 ###############################
 
-setwd("C:/Final Data Sets/Trinity College PhD 2021/GTD Data")
+setwd("")
 
 #####################
 #####################
