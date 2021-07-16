@@ -613,7 +613,7 @@ score(Tabu_BA, Taliban4, type = "loglik")
 # Using the Bayesian Network Structure #
 ########################################
 
-# To determine if there is any conditional dependence, the dsep funcion ca be used. Where two variables are connected to each other through a third, then of the dsep is false, this indicates that there is conditional dependence if the path through the third variable is not blocked. The path only becomes blocked if the two variables condition on the third
+# To determine if there is any conditional dependence, the dsep function ca be used. Where two variables are connected to each other through a third, then of the dsep is false, this indicates that there is conditional dependence if the path through the third variable is not blocked. The path only becomes blocked if the two variables condition on the third
 
 dsep(Tabu_BA, x = "GovernmentGeneral", y = "Business")
 # [1] FALSE
@@ -625,7 +625,6 @@ dsep(Tabu_BA, x = "GovernmentGeneral", y = "OneDead")
 path(Tabu_BA, from = "GovernmentGeneral", to = "Business")
 dsep(Tabu_BA, x = "GovernmentGeneral", y = "Business", z = "Assassination")
 # When assassination is conditioned on, the path is blocked and they become desparated.
-
 
 ################################
 ################################
@@ -656,9 +655,6 @@ bn.bayes <- bn.fit(Tabu_BA, Taliban4, method = "bayes", iss = 10)
 # Maximum Likelihood Estimates #
 
 bn.mle$Bomb 
-# Conditional probability table:
-# ArmedAssault Assassination          Bomb HostageKidnap   OtherAttack 
-# 0.22993062    0.08787578    0.45887017    0.08259002    0.14073340 
 
 bn.mle$Target
 
@@ -720,7 +716,6 @@ GPA
 SxT <- cpdist(bn.bayes, nodes = c("Bomb", "Helmand"),
                evidence = (OneDead == "1"))
 
-
 #########################
 # Approximate inference #
 #########################
@@ -758,7 +753,6 @@ nparams(dag4, Taliban4)
 score(dag4, data = Taliban4, type = "bic")
 score(dag2, data = Taliban4, type = "bic")
 
-
 # The bic score for the Bayesian Network that features the new arc, has a lower score than the network without it, which suggests adding this arc is actually beneficial to the network
 
 score(Tabu_BA, data = Taliban4, type = "bic")
@@ -772,7 +766,6 @@ arc.strength(Tabu_BA, Taliban4, criterion = "bic")
 arc.strength(dag2, data = Taliban4, criterion = "bic")
 
 # All the arcs apart from Assassination GovernmentGeneral would worsen the bic score, thus indicating it is not a good fit to the data.
-
 
 ########################
 ########################
