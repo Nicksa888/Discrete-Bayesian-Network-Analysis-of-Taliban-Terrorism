@@ -6,8 +6,8 @@
 
 # Discrete Bayesian Network Analysis of Taliban Terrorism #
 
-# This project will provide two separate analyses. The first will explore a network comprising binary variables, while the second will examine the network based on 
-# categorical variables with several levels.
+# This project will provide two separate analyses. The first will explore a network comprising binary variables, while the second will examine the 
+# network based on categorical variables with several levels.
 
 #########################
 #########################
@@ -90,9 +90,10 @@ dim(Taliban)
 
 library(data.table) # for set.names function
 
-setnames(Taliban, old = c("iyear", "imonth", "iday", "provstate", "city", "multiple", "success", "suicide", "attacktype1_txt", "gname", "targtype1_txt", "weaptype1_txt", 
-                          "nkill", "nwound"), 
-                  new = c("Year", "Month", "Day", "Province", "City", "Multiple", "Success", "Suicide", "Attack", "Group", "Target", "Weapon", "Dead", "Wounded"))
+setnames(Taliban, old = c("iyear", "imonth", "iday", "provstate", "city", "multiple", "success", "suicide", "attacktype1_txt", "gname", "targtype1_txt", 
+                          "weaptype1_txt", "nkill", "nwound"), 
+                  new = c("Year", "Month", "Day", "Province", "City", "Multiple", "Success", "Suicide", "Attack", "Group", "Target", "Weapon", "Dead", 
+                          "Wounded"))
 
 Taliban <- dplyr::select(Taliban, Year, Month, Province, City, Suicide, Multiple, Success, Attack, Target, Group, Weapon, Dead)
 
@@ -234,7 +235,8 @@ names(Taliban)
 # One Hot Encoding #
 ####################
 
-# All variables are converted into separate binary variables where each categorical level becomes such a binary variable. The purpose is to indicate Bayesian network 
+# All variables are converted into separate binary variables where each categorical level becomes such a binary variable. The purpose is to indicate 
+Bayesian network 
 # association between specific variables, rather than attack and target variables which each comprise several levels.
 
 ############
@@ -288,16 +290,16 @@ dim(Tbn_Corrected)
 # Data Filters #
 ################
 
-# To simplify the network construction, and to avoid situations where the total of pairwise counts between any two totals were less than ten, the five provinces with most 
-# attacks were selected, as was the five dead totals with the highest counts
+# To simplify the network construction, and to avoid situations where the total of pairwise counts between any two totals were less than ten, the five 
+provinces with most attacks were selected, as was the five dead totals with the highest counts
 # The five provinces are: Helmand, Kandahar, Kabul, Ghazni and Kunduz
 # The five dead counts are zero, one, two, three and four
 # The five targets with the highest attack counts are police, private, GovernmentGeneral, Military and Business
-# The four attack types with the highest counts are Bomb, Armed Assault, Assassination and Hostage Kidnap. Unknown attack has a higher count than hostage kidnap, but it is 
-# overlooked as any attack could be an unknown attack.
+# The four attack types with the highest counts are Bomb, Armed Assault, Assassination and Hostage Kidnap. Unknown attack has a higher count than hostage 
+kidnap, but it is overlooked as any attack could be an unknown attack.
 
-Taliban4 <- dplyr::select(Tbn_Corrected, Helmand, Kandahar, Kabul, Ghazni, Kunduz, Police, Private, GovernmentGeneral, Military, Business, Bomb, ArmedAssault, Assassination, 
-                          HostageKidnap, ZeroDead, OneDead, TwoDead, ThreeDead, FourDead)
+Taliban4 <- dplyr::select(Tbn_Corrected, Helmand, Kandahar, Kabul, Ghazni, Kunduz, Police, Private, GovernmentGeneral, Military, Business, Bomb, 
+                          ArmedAssault, Assassination, HostageKidnap, ZeroDead, OneDead, TwoDead, ThreeDead, FourDead)
 names(Taliban4)
 str(Taliban4)
 dim(Taliban4)
@@ -308,8 +310,8 @@ dim(Taliban4)
 ####################
 ####################
 
-dag2 <- empty.graph(nodes = c("Helmand", "Kandahar", "Kabul", "Ghazni", "Kunduz", "Police", "Private", "GovernmentGeneral", "Military", "Business", "Bomb", "ArmedAssault", 
-                              "Assassination",  "HostageKidnap", "ZeroDead", "OneDead", "TwoDead", "ThreeDead", "FourDead"
+dag2 <- empty.graph(nodes = c("Helmand", "Kandahar", "Kabul", "Ghazni", "Kunduz", "Police", "Private", "GovernmentGeneral", "Military", "Business", 
+                              "Bomb", "ArmedAssault", "Assassination",  "HostageKidnap", "ZeroDead", "OneDead", "TwoDead", "ThreeDead", "FourDead"
 ))
 
 arc.set = matrix(c("Bomb", "Business", 
@@ -469,8 +471,8 @@ str(Taliban4)
 # Province Node Blacklist #
 ###########################
 
-# This blacklist informs R to avoid creating any arcs between these arcs. For instance, there is no point creating arcs between two provincial variables or two attack type 
-# variables.
+# This blacklist informs R to avoid creating any arcs between these arcs. For instance, there is no point creating arcs between two provincial variables
+or two attack type variables.
 
 BA_BL <- matrix(c(
   "Helmand", "Kandahar",
@@ -622,9 +624,9 @@ score(Tabu_BA, Taliban4, type = "loglik")
 # Using the Bayesian Network Structure #
 ########################################
 
-# To determine if there is any conditional dependence, the dsep function ca be used. Where two variables are connected to each other through a third, then of the dsep is 
-# false, this indicates that there is conditional dependence if the path through the third variable is not blocked. The path only becomes blocked if the two variables 
-# condition on the third
+# To determine if there is any conditional dependence, the dsep function ca be used. Where two variables are connected to each other through a third, 
+then of the dsep is false, this indicates that there is conditional dependence if the path through the third variable is not blocked. The path only 
+becomes blocked if the two variables condition on the third
 
 dsep(Tabu_BA, x = "GovernmentGeneral", y = "Business")
 # [1] FALSE
@@ -748,7 +750,8 @@ ci.test("Kabul", "ZeroDead", c("ArmedAssault", "Police"), test = "mi", data = Ta
 
 ci.test("Kabul", "ZeroDead", c("ArmedAssault", "Police"), test = "x2", data = Taliban4)
 
-# Both tests generate insignificant p-values, thus indicating that dependent relationship encoded by kabul and ZeroDead is not significant given its parents.
+# Both tests generate insignificant p-values, thus indicating that dependent relationship encoded by kabul and ZeroDead is not significant given its 
+parents.
 
 #################
 # Arc Strengths #
@@ -764,8 +767,8 @@ nparams(dag4, Taliban4)
 score(dag4, data = Taliban4, type = "bic")
 score(dag2, data = Taliban4, type = "bic")
 
-# The bic score for the Bayesian Network that features the new arc, has a lower score than the network without it, which suggests adding this arc is actually beneficial to 
-# the network
+# The bic score for the Bayesian Network that features the new arc, has a lower score than the network without it, which suggests adding this arc is 
+actually beneficial to the network
 
 score(Tabu_BA, data = Taliban4, type = "bic")
 
@@ -773,8 +776,8 @@ score(Tabu_BA, data = Taliban4, type = "bic")
 
 arc.strength(Tabu_BA, Taliban4, criterion = "bic")
 
-# The results indicate that removal of any arc learned by Tabu would worsen the bic score, thus reducing the goodness of fit to the data. Therefore, the network learned by 
-# the Tabu algorithm is a good fit to the data
+# The results indicate that removal of any arc learned by Tabu would worsen the bic score, thus reducing the goodness of fit to the data. Therefore, the 
+network learned by he Tabu algorithm is a good fit to the data
 
 arc.strength(dag2, data = Taliban4, criterion = "bic")
 
